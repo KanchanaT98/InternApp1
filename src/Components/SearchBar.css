@@ -1,0 +1,28 @@
+.container{
+    width: 80%;
+}
+
+.search-input{
+    width: 40%;
+
+}
+
+#searchText{
+    height: 30px;
+    width: 70%;
+    border-radius: 5px;
+    padding-left: 5px;
+}
+
+.searchBtn{
+    height: 30px;
+    width: 20%;
+    background-color: rgb(128, 128, 247);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 5px 5px #ccc;
+    border: none;
+    margin-left: 1%;
+
+}

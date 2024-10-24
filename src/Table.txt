@@ -1,0 +1,91 @@
+import React, { useEffect } from "react";
+import { useState } from "react";
+import './Page1.css';
+import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
+import Form from "./Components/Form";
+
+function Page1() {
+    const [formOpen, setFormOpen] = useState(false);
+    const [rows, setRows] = useState([]);
+
+    useEffect(() =>{
+        setRows([{customerName: "John", accountNumber: "2102002", telephoneNumber: "011-2242434", balance: "10500"}
+            , {customerName: "Roger", accountNumber: "2134235", telephoneNumber: "011-5565390", balance: "2300"}
+        ]);
+    },[]);
+
+    const [rowToEdit, setRowToEdit] = useState(null);
+
+    const handleDeleteRow = (targetIndex) => {
+        setRows(rows.filter((_, idx) => idx !== targetIndex));
+        
+    }
+
+    const handleRowToEdit = (idx) => {
+        setRowToEdit(idx);
+
+        setFormOpen(true)
+    }
+
+    const handleSubmit = (newRow) =>{
+        if(rowToEdit==null){
+        setRows([...rows, newRow]);
+        alert("Successfully Added")
+        }else{
+            setRows(
+                rows.map((currRow, idx) =>{
+                    if (idx !== rowToEdit) return currRow; alert("Successfully Editted");
+                    return newRow;
+                })
+            )
+        }
+    };
+
+    return (
+      <div className="body">
+        {formOpen && (
+            <Form closeForm={() =>{
+            setFormOpen(false);
+            setRowToEdit(null);
+        }}
+        onSubmit={handleSubmit}
+        defaultValue ={rowToEdit !== null && rows[rowToEdit]}
+        />
+        )}
+        <div className="table">
+            <tabel className = "table1">
+                <thead>
+                    <tr>
+                        <th className="nameHead">Customer Name</th>
+                        <th>Account Number</th>
+                        <th>Telephone Number</th>
+                        <th>Balance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        rows.map((rows, idx) => {
+                            return <tr key={idx}>
+                                <td className="nameHead">{rows.customerName}</td>
+                                <td>{rows.accountNumber}</td>
+                                <td>{rows.telephoneNumber}</td>
+                                <td>{rows.balance}</td>
+                                <td>
+                                    <span className="action">
+                                    <BsFillTrashFill className="delete-btn" onClick={() => handleDeleteRow(idx)}/>
+                                    <BsFillPencilFill className="edit-btn" onClick={() => handleRowToEdit(idx)}/>
+                                    </span>
+                                </td>
+                            </tr>
+                        
+                        })
+                    }
+                </tbody>
+            </tabel>
+        </div>
+        <div><button className="add-btn" onClick={() => setFormOpen(true)}>Add</button></div>
+      </div>
+    )
+  }
+  export default Page1

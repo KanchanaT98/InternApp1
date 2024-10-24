@@ -1,0 +1,98 @@
+
+.body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #faf9f6;
+}
+
+
+.table-body :hover {
+    background-color: #f3eeee;
+    
+}
+
+.action{
+    display: flex;
+    justify-content: space-around;
+}
+
+.action svg {
+    cursor: pointer;
+}
+
+.delete-btn{
+    color: red;
+}
+
+.edit-btn{
+    color: rgb(31, 30, 30);
+}
+
+.add-btn{
+    display: block;
+    margin: auto;
+    margin-top: 1rem;
+    border: none;
+    background-color: rgb(117, 117, 248);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 5px 5px #ccc;
+    
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    width: 80%;
+    border-radius: 10px;
+}
+
+.table-body {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.header-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px;
+    
+}
+
+.table-row {
+    display: flex;
+    border-radius: 5px;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #d8d5d5; /* Optional: add border for separation */
+}
+
+.header-item, .table-item {
+    flex: 1; /* Distribute space evenly */
+    text-align: left; /* Align text to the left */
+    padding: 5px 10px; /* Add some padding */
+    text-align: center;
+}
+
+.table-header{
+    font-weight: bold; /* Make header bold */
+    background-color: #d3d0d0; /* Optional: header background color */
+    text-align: left;
+    align-items: center;
+    border-radius: 5px;
+    display: flex;
+    padding: 5px;
+}
+
+.action {
+    display: flex;
+    gap: 0px; /* Space between icons */
+}
