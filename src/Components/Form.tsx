@@ -1,26 +1,39 @@
-import React from "react";
+import  React, { FormEvent, useState } from "react";
 import "./Form.css"
-import { useState } from "react";
 
-function Form({ closeForm, onSubmit, defaultValue }) {
+    interface FormProps {
+    closeForm: () => void;
+    onSubmit: (formState: FormState) => void;
+    defaultValue?: FormState | null;
+    }
+  
+  interface FormState {
+    id?: number;
+    name: string;
+    accountNo: string;
+    contactNo: string;
+    balance: number;
+  } export { FormState };
 
-    const[formState, setFormState] = useState(
+const Form: React.FC<FormProps> = ({ closeForm, onSubmit, defaultValue }) => {
+
+    const[formState, setFormState] = useState<FormState>(
         defaultValue || {
-        // id: "",
+        id: undefined,
         name: "",
         accountNo: "",
         contactNo: "",
-        balance: ""
+        balance: undefined
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormState({
             ...formState,
             [e.target.name]: e.target.value
         })
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if(!validateForm()) return;
@@ -41,10 +54,10 @@ function Form({ closeForm, onSubmit, defaultValue }) {
 
     return(
          <div className="Form-container" onClick={(e) => {
-            if (e.target.className ==="Form-container") closeForm();}
+            if ((e.target as HTMLElement).className === 'Form-container') closeForm();}
             }>
             <div className="Form">
-                <form>
+                <form onSubmit={handleSubmit}>
                     {/* <div className="input-group">
                         <label htmlFor="customer-id">Customer Id</label>
                         <input name="id" value={formState.customerId} onChange={handleChange}/>
@@ -66,7 +79,7 @@ function Form({ closeForm, onSubmit, defaultValue }) {
                         <input name="balance" value={formState.balance} onChange={handleChange}/>
                     </div>
                     <div>
-                        <button className="btn" type="submit" onClick={handleSubmit}>Submit</button>
+                        <button className="btn" type="submit">Submit</button>
                     </div>
                 </form>
             </div>

@@ -1,19 +1,27 @@
 import React, { useEffect,  useState} from "react";
 import './Page1.css';
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
-import Form from "./Components/Form";
+import Form from "./Components/Form.tsx";
 import axios from "axios";
-import SearchBar from "./Components/SearchBar";
+import SearchBar from "./Components/SearchBar.tsx";
+
+interface Customer {
+    id?: number;
+    name: string;
+    accountNo: string;
+    contactNo: string;
+    balance: number;
+}
 
 function Page1() {
-    const [formOpen, setFormOpen] = useState(false);
-    const [rows, setRows] = useState([]);
-    const [rowToEdit, setRowToEdit] = useState(null);
+    const [formOpen, setFormOpen] = useState<boolean>(false);
+    const [rows, setRows] = useState<Customer[]>([]);
+    const [rowToEdit, setRowToEdit] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://customerapi-eqhqhebdhcbwhzd9.canadacentral-01.azurewebsites.net/api/Customers');
+                const response = await axios.get<{data: Customer[]}>('https://customerapi-eqhqhebdhcbwhzd9.canadacentral-01.azurewebsites.net/api/Customers');
                 console.log(response.data)
                 setRows(response.data.data);
             } catch (error) {
@@ -24,17 +32,17 @@ function Page1() {
     }, []);
 
 
-    const handleDeleteRow = async (targetIndex) => {
-        const deletedRow = {
+    const handleDeleteRow = async (targetIndex: number) => {
+        const deletedRow  = {
             name: rows[targetIndex].name,
             accountNo: rows[targetIndex].accountNo,
             contactNo: rows[targetIndex].contactNo,
-            balance: parseFloat(rows[targetIndex].balance) 
+            balance: rows[targetIndex].balance
         };
 
         try{
             console.log(deletedRow);
-            const response = await axios.delete(`https://customerapi-eqhqhebdhcbwhzd9.canadacentral-01.azurewebsites.net/api/Customers/${rows[targetIndex].id}`);
+            const response = await axios.delete<{data : number}>(`https://customerapi-eqhqhebdhcbwhzd9.canadacentral-01.azurewebsites.net/api/Customers/${rows[targetIndex].id}`);
             console.log(response.data.data);
             alert("Successfully Deleted");
         }catch(error){
@@ -44,21 +52,22 @@ function Page1() {
         
     }
 
-    const handleRowToEdit = (idx) => {
+    const handleRowToEdit = (idx: number) => {
         setRowToEdit(idx);
         setFormOpen(true)
     }
 
-    const handleSubmit = async (newRow) =>{
-        const formattedRow = {
+    const handleSubmit = async (newRow: Customer): Promise<void> =>{
+        const formattedRow : Customer={
+            id: null,
             name: newRow.name,
             accountNo: newRow.accountNo,
             contactNo: newRow.contactNo,
-            balance: parseFloat(newRow.balance) 
+            balance: newRow.balance
         };
         if(rowToEdit==null){
             try{
-                const response = await axios.post('https://customerapi-eqhqhebdhcbwhzd9.canadacentral-01.azurewebsites.net/api/Customers', formattedRow);
+                const response = await axios.post<{data: Customer[]}>('https://customerapi-eqhqhebdhcbwhzd9.canadacentral-01.azurewebsites.net/api/Customers', formattedRow);
                 console.log(formattedRow);
                 setRows([...rows, formattedRow]);
                 alert("Successfully Added")
@@ -70,12 +79,12 @@ function Page1() {
             const updatedRow = { ...rows[rowToEdit], ...formattedRow };
             try{
                 console.log(formattedRow)
-                await axios.put(`https://customerapi-eqhqhebdhcbwhzd9.canadacentral-01.azurewebsites.net/api/Customers/${rows[rowToEdit].id}`, formattedRow);
+                await axios.put<{data: Customer[]}>(`https://customerapi-eqhqhebdhcbwhzd9.canadacentral-01.azurewebsites.net/api/Customers/${rows[rowToEdit].id}`, formattedRow);
                 
                         setRows(rows.map((formattedRow, idx) => (
                             idx === rowToEdit ? updatedRow : formattedRow)));
                         alert("Successfully Edited");
-                        return updatedRow
+                        
                         
             }catch(error){
                 console.error("error putting data :", error);
